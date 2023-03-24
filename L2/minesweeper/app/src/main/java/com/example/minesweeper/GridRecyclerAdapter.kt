@@ -45,7 +45,6 @@ class GridRecyclerAdapter(tiles: MutableList<Tile>, listener: TileListener):
 
         fun bind(tile: Tile){
             itemView.setBackgroundColor(Color.GRAY)
-
             itemView.setOnClickListener { listener.onTileClick(tile) }
         }
 
