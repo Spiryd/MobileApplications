@@ -1,3 +1,56 @@
 <resources>
     <string name="app_name">hangman</string>
+
+    <string-array name="words">
+        <item>crop</item>
+        <item>leave</item>
+        <item>table</item>
+        <item>spirit</item>
+        <item>sustain</item>
+        <item>poll</item>
+        <item>trench</item>
+        <item>wire</item>
+        <item>prison</item>
+        <item>hard</item>
+        <item>draft</item>
+        <item>meal</item>
+        <item>image</item>
+        <item>burial</item>
+        <item>opposed</item>
+        <item>soap</item>
+        <item>channel</item>
+        <item>front</item>
+        <item>bike</item>
+        <item>underline</item>
+        <item>drive</item>
+        <item>legend</item>
+        <item>place</item>
+        <item>deck</item>
+        <item>core</item>
+        <item>album</item>
+        <item>village</item>
+        <item>blade</item>
+        <item>short</item>
+        <item>cable</item>
+        <item>eagle</item>
+        <item>soar</item>
+        <item>thread</item>
+        <item>treat</item>
+        <item>miracle</item>
+        <item>lineage</item>
+        <item>wash</item>
+        <item>read</item>
+        <item>plaster</item>
+        <item>chicken</item>
+        <item>match</item>
+        <item>layout</item>
+        <item>hair</item>
+        <item>milk</item>
+        <item>reduce</item>
+        <item>jacket</item>
+        <item>throne</item>
+        <item>follow</item>
+        <item>work</item>
+        <item>abortion</item>
+    </string-array>
 </resources>

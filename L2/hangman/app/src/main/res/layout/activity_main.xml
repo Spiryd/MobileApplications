@@ -7,12 +7,273 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/wordView"
+        android:layout_width="343dp"
+        android:layout_height="79dp"
+        android:autoSizeTextType="uniform"
         android:text="Hello World!"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.62" />
+
+    <LinearLayout
+        android:layout_width="410dp"
+        android:layout_height="190dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wordView"
+        app:layout_constraintVertical_bias="1.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/aButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="A" />
+
+            <Button
+                android:id="@+id/bButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="B" />
+
+            <Button
+                android:id="@+id/cButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="C" />
+
+            <Button
+                android:id="@+id/dButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="D" />
+
+            <Button
+                android:id="@+id/eButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="E" />
+
+            <Button
+                android:id="@+id/fButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="F" />
+
+            <Button
+                android:id="@+id/gButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="G" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/hButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="H" />
+
+            <Button
+                android:id="@+id/iButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="I" />
+
+            <Button
+                android:id="@+id/jButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="J" />
+
+            <Button
+                android:id="@+id/kButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="K" />
+
+            <Button
+                android:id="@+id/lButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="L" />
+
+            <Button
+                android:id="@+id/mButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="M" />
+
+            <Button
+                android:id="@+id/nButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="N" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/oButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="O" />
+
+            <Button
+                android:id="@+id/pButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="P" />
+
+            <Button
+                android:id="@+id/qButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="Q" />
+
+            <Button
+                android:id="@+id/rButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="R" />
+
+            <Button
+                android:id="@+id/sButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="S" />
+
+            <Button
+                android:id="@+id/tButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="T" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/uButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="U" />
+
+            <Button
+                android:id="@+id/vButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="V" />
+
+            <Button
+                android:id="@+id/wButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="W" />
+
+            <Button
+                android:id="@+id/xButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="X" />
+
+            <Button
+                android:id="@+id/yButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="Y" />
+
+            <Button
+                android:id="@+id/zButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:layout_weight="1"
+                android:text="Z" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/wisielecImg"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/wordView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.73"
+        app:srcCompat="@drawable/wisielec0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
