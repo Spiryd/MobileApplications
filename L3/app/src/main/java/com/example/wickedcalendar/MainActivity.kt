@@ -1,6 +1,11 @@
 package com.example.wickedcalendar
 
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,42 +14,71 @@ import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity(), OnItemListener {
     private lateinit var monthYear: TextView
     private lateinit var calendarRecycler: RecyclerView
     private lateinit var selectedDate: LocalDate
     private var events: HashMap<LocalDate, MutableList<Event>> = hashMapOf()
+    private val dataBase by lazy { AppDatabase.getDatabase(this).eventDao() }
+
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        //Log.i("startForResult", "${result.resultCode}")
         if (result.resultCode == Activity.RESULT_OK) {
-            //Log.i("startForResult", "$events")
             val intent = result.data
             if (intent != null) {
                 val e = intent.getParcelableArrayListExtra("events_out", Event::class.java)
-                if (e != null){
+                val date = intent.getStringExtra("date_string")
+                if (e != null && date != null){
                     if (e.isNotEmpty()) {
-                        events[e[0].date] = e.toMutableList()
+                        events.remove(LocalDate.parse(date))
+                        events[LocalDate.parse(date)] = e.toMutableList()
+                    } else {
+                        events.remove(LocalDate.parse(date))
+                    }
+                    lifecycleScope.launch {
+                        dataBase.deleteAllOnDate(date)
+                        dataBase.insertAll(*e.toTypedArray())
                     }
                 }
-                //Log.i("startForResult","$events")
-                //Log.i("startForResult", "$e")
             }
         }
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        lifecycleScope.launch {
+            dataBase.allEvents().collect{eventList ->
+                events = hashMapOf()
+                Log.i("populateEvents", eventList.first().dateString)
+                if(eventList.isNotEmpty()){
+                    for (e in eventList){
+                        if (events[e.date()] == null){
+                            events[e.date()] = mutableListOf(e)
+                        }else{
+                            events[e.date()]!!.add(e)
+                        }
+                    }
+                }
+            }
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initWidgets()
         selectedDate = LocalDate.now()
         setMonthView()
+        createNotificationChannel()
+        scheduleNotification()
     }
+
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -69,8 +103,8 @@ class MainActivity : AppCompatActivity(), OnItemListener {
 
         val calendarAdapter = CalendarAdapter(daysInMonth, this)
         //7 column for 7 days
-        val layoutMenager: RecyclerView.LayoutManager = GridLayoutManager(applicationContext, 7)
-        calendarRecycler.layoutManager = layoutMenager
+        val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(applicationContext, 7)
+        calendarRecycler.layoutManager = layoutManager
         calendarRecycler.adapter = calendarAdapter
     }
 
@@ -121,5 +155,47 @@ class MainActivity : AppCompatActivity(), OnItemListener {
             intent.putParcelableArrayListExtra("events", ArrayList(e))
             startForResult.launch(intent)
         }
+    }
+
+    private fun scheduleNotification(){
+        val intent = Intent(applicationContext, Notification::class.java)
+        val title = ""
+        val message = ""
+        intent.putExtra(titleExtra, title)
+        intent.putExtra(messageExtra, message)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            applicationContext,
+            notificationID,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val time = getTime()
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            time,
+            pendingIntent
+        )
+    }
+
+    private fun getTime(): Long {
+        val time = LocalTime.now().plusMinutes(1)
+        val date = LocalDate.now()
+
+        val calendar = Calendar.getInstance()
+        calendar.set(date.year, date.monthValue, date.dayOfMonth, time.hour, time.minute)
+        return calendar.timeInMillis
+    }
+
+    private fun createNotificationChannel(){
+        val name = "Event Channel"
+        val desc = "Event Notification channel"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(channelID, name, importance)
+        channel.description = desc
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 }

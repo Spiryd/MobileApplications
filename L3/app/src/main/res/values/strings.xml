@@ -18,4 +18,6 @@
     <string name="description">Description</string>
     <string name="title">Title</string>
     <string name="save">Save</string>
+    <string name="delete_button">Delete button</string>
+    <string name="select_time_frame">Select Time Frame</string>
 </resources>

@@ -19,13 +19,20 @@ class EventViewModel: ViewModel() {
         events.postValue(list)
     }
 
-    fun updateEvent(id: UUID, title: String, desc: String, date: LocalDate)
+    fun updateEvent(id: Int, title: String, desc: String, date: LocalDate)
     {
         val list = events.value
         val event = list!!.find { it.id == id }!!
         event.title = title
         event.description = desc
-        event.date = date
+        event.dateString = Event.dateFormatter.format(date)
+        events.postValue(list)
+    }
+
+    fun deleteEvent(id: Int){
+        val list = events.value
+        val event = list!!.find { it.id == id }!!
+        list.remove(event)
         events.postValue(list)
     }
 }

@@ -3,6 +3,7 @@ package com.example.wickedcalendar
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -34,13 +35,13 @@ class OnDay : AppCompatActivity(), EventClickListener {
         val e: ArrayList<Event> = intent.getParcelableArrayListExtra("events", Event::class.java)!!
         events = e.toMutableList()
         //events.add(Event("a", date, "a"))
-        //Log.i("onCreateOnDay", "$e")
+        Log.i("onCreateOnDay", "$events")
         setRecyclerView()
     }
 
     private fun setRecyclerView(){
         val activity = this
-        eventViewModel.events.value = events
+        eventViewModel.events.postValue(events)
         eventViewModel.events.observe(this){
             binding.eventRecyclerView.apply {
                 layoutManager = LinearLayoutManager(applicationContext)
@@ -52,11 +53,18 @@ class OnDay : AppCompatActivity(), EventClickListener {
     fun goBack(view: View) {
         val data = Intent()
         data.putParcelableArrayListExtra("events_out", ArrayList(events))
+        data.putExtra("date_string", Event.dateFormatter.format(date))
         setResult(Activity.RESULT_OK, data)
+        Log.i("goBack", "$events")
         finish()
     }
 
     override fun editEvent(event: Event) {
         EventSheet(event, date).show(supportFragmentManager, "NewEvent")
+    }
+
+    override fun deleteEvent(event: Event) {
+        val eventViewModel = ViewModelProvider(this)[EventViewModel::class.java]
+        eventViewModel.deleteEvent(event.id)
     }
 }
