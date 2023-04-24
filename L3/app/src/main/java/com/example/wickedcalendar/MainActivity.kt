@@ -75,8 +75,6 @@ class MainActivity : AppCompatActivity(), OnItemListener {
         initWidgets()
         selectedDate = LocalDate.now()
         setMonthView()
-        createNotificationChannel()
-        scheduleNotification()
     }
 
 
@@ -146,7 +144,6 @@ class MainActivity : AppCompatActivity(), OnItemListener {
 
     override fun onItemClick(position: Int, dayText: String) {
         if (dayText != ""){
-            //Log.i("onClick", "$events")
             val intent = Intent(this, OnDay::class.java)
             intent.putExtra("year", selectedDate.year)
             intent.putExtra("month", selectedDate.monthValue)
@@ -157,45 +154,4 @@ class MainActivity : AppCompatActivity(), OnItemListener {
         }
     }
 
-    private fun scheduleNotification(){
-        val intent = Intent(applicationContext, Notification::class.java)
-        val title = ""
-        val message = ""
-        intent.putExtra(titleExtra, title)
-        intent.putExtra(messageExtra, message)
-
-        val pendingIntent = PendingIntent.getBroadcast(
-            applicationContext,
-            notificationID,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val time = getTime()
-        alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            time,
-            pendingIntent
-        )
-    }
-
-    private fun getTime(): Long {
-        val time = LocalTime.now().plusMinutes(1)
-        val date = LocalDate.now()
-
-        val calendar = Calendar.getInstance()
-        calendar.set(date.year, date.monthValue, date.dayOfMonth, time.hour, time.minute)
-        return calendar.timeInMillis
-    }
-
-    private fun createNotificationChannel(){
-        val name = "Event Channel"
-        val desc = "Event Notification channel"
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(channelID, name, importance)
-        channel.description = desc
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
-    }
 }

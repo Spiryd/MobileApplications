@@ -35,7 +35,7 @@ class OnDay : AppCompatActivity(), EventClickListener {
         val e: ArrayList<Event> = intent.getParcelableArrayListExtra("events", Event::class.java)!!
         events = e.toMutableList()
         //events.add(Event("a", date, "a"))
-        Log.i("onCreateOnDay", "$events")
+        //Log.i("onCreateOnDay", "$events")
         setRecyclerView()
     }
 
