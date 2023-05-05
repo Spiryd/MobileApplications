@@ -24,9 +24,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         imagesRecyclerView = findViewById(R.id.imageGalleryRecyclerView)
-        requestPermissions()
-
         prepareRecyclerView()
+        requestPermissions()
     }
 
     private fun checkPermission(): Boolean {
