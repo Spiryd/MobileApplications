@@ -10,8 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import java.io.File
 
-
-class ImagesRecyclerViewAdapter(private var context: Context, private var imagePathList: MutableList<String>): RecyclerView.Adapter<ImagesRecyclerViewAdapter.RecyclerViewHolder>() {
+class ImagesRecyclerViewAdapter(private var context: Context, private var images: MutableList<ImageHolder>, private val onClickInterface: OnClickInterface): RecyclerView.Adapter<ImagesRecyclerViewAdapter.RecyclerViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.gallery_item, parent, false)
@@ -19,25 +18,24 @@ class ImagesRecyclerViewAdapter(private var context: Context, private var imageP
     }
 
     override fun getItemCount(): Int {
-        return imagePathList.size
+        return images.size
     }
 
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
-        val imgFile = File(imagePathList[position])
+        val imgFile = File(images[position].path)
         if (imgFile.exists()){
             Picasso.get().load(imgFile).placeholder(R.drawable.ic_launcher_background).into(holder.imageView)
-            holder.itemView.setOnClickListener {
-                val i = Intent(context, ImageDetailActivity::class.java)
-                i.putExtra("imgPath", imagePathList[position])
-                context.startActivity(i)
-            }
         }
     }
 
-    class RecyclerViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class RecyclerViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         var imageView: ImageView
         init{
             imageView = itemView.findViewById(R.id.galleryImage)
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                onClickInterface.onImageClick(position)
+            }
         }
     }
 }
