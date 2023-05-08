@@ -3,150 +3,87 @@
 package com.example.tictactoes
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.activity.viewModels
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.tictactoes.ui.theme.TicTacToesTheme
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-var game = Game(3)
+data class GameState(
+    val size: Int = 3,
+    var player: Int = 1,
+    val board: Array<IntArray> = Array(size){IntArray(size)}
+)
+
+class GameViewModel: ViewModel() {
+    private val _state = MutableStateFlow(GameState())
+    val state: StateFlow<GameState> = _state.asStateFlow()
+
+    fun gameBoard(): Array<IntArray>{
+        return _state.value.board
+    }
+
+    fun makeMove(y: Int, x: Int){
+        _state.update { currentState ->
+            currentState.board[y][x] = currentState.player
+            currentState.player = -currentState.player
+            currentState.copy(
+                board = currentState.board,
+                player = currentState.player,
+            )
+        }
+    }
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val viewModel: GameViewModel by viewModels()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect{
+
+                }
+            }
+        }
+
         setContent {
-            SetUp(3, this)
-        }
-    }
-}
-
-@Composable
-fun SetUp(width: Int, activity: MainActivity){
-    val context = LocalContext.current
-    val options = mutableListOf<String>()
-    for (i in 3..20){
-        options += String.format("$i x $i")
-    }
-    var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf(options[width - 3]) }
-
-    TicTacToesTheme {
-        Column {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                ExposedDropdownMenuBox(
-                    expanded = expanded,
-                    onExpandedChange = {
-                        expanded = !expanded
-                    }
+            TicTacToesTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
                 ) {
-                    TextField(
-                        value = selectedText,
-                        onValueChange = {},
-                        readOnly = true,
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                        modifier = Modifier.menuAnchor()
-                    )
-                    ExposedDropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }
-                    ) {
-                        options.forEach { item ->
-                            DropdownMenuItem(
-                                text = { Text(text = item) },
-                                onClick = {
-                                    selectedText = item
-                                    expanded = false
-                                    Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
-                                }
-                            )
-                        }
+                    GameBoard(viewModel)
+                    Button(onClick = { viewModel.makeMove(1, 1) }) {
+                        Text(text = "OK")
                     }
                 }
-                Button(
-                    onClick = {
-                        val w = options.indexOf(selectedText) + 3
-                        game = Game(w)
-                        activity.setContent {
-                            SetUp(width = w, activity = activity)
-                        }
-                    },
-                    modifier = Modifier.padding(10.dp)
-                ) {
-                    Text("New Game")
-                }
+
             }
-            GameScreen(width)
         }
+
+
     }
 }
 
 @Composable
-fun GameScreen(width: Int){
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp
-    val s = (screenWidth / width)
-    Column {
-        for (i in 0 until width){
-            Row {
-                for (j in 0 until width){
-                    GameSquare(i, j, s)
-                }
-            }
-        }
-    }
+fun GameBoard(viewModel: GameViewModel) {
+    Text("${viewModel}")
 }
-
-@Composable
-fun GameSquare(y: Int, x: Int, s: Int){
-    var state by remember { mutableStateOf(" ") }
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .background(Color.DarkGray)
-            .size(s.dp)
-            .border(width = 1.dp, color = Color.White)
-            .clickable {
-                val res = game.makeMove(y, x)
-                if (res == 1) {
-                    state = "X"
-                } else if (res == -1) {
-                    state = "O"
-                }
-            }
-    ) {
-        Text(
-            text = state,
-            color = Color.White,
-        )
-    }
-}
-
