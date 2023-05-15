@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
+import android.os.PersistableBundle
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
@@ -77,7 +78,6 @@ class MainActivity : AppCompatActivity() , OnClickInterface{
         imagesRecyclerView.layoutManager = manager
         imagesRecyclerView.adapter = imagesRecyclerViewAdapter
     }
-
 
     private fun getImagePath() {
         val isSDPresent = Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
