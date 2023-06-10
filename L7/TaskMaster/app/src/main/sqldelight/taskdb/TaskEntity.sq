@@ -1,0 +1,19 @@
+CREATE TABLE TaskEntity  (
+  id INTEGER PRIMARY KEY,
+  description TEXT NOT NULL
+);
+
+INSERT INTO TaskEntity (description)
+VALUES ('Try to survive');
+
+selectAll:
+SELECT *
+FROM TaskEntity;
+
+insert:
+INSERT INTO TaskEntity(description)
+VALUES (?);
+
+deleteNoteById:
+DELETE FROM TaskEntity
+WHERE id=:id;

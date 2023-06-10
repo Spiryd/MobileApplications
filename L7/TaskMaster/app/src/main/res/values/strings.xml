@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">TaskMaster</string>
+    <string name="left"><![CDATA[<-]]></string>
+    <string name="add_new_task">Add new Task</string>
+    <string name="placeholder">Placeholder</string>
+    <string name="delete_button">delete button</string>
+    <string name="description">description</string>
+    <string name="new_task">New Task</string>
+    <string name="save">Save</string>
+</resources>
